@@ -55,7 +55,7 @@ import { data, useNavigate } from "react-router-dom";
 import axios from "axios"; // ייבוא axios
 import "../Designs/SignUp.css";
 import { user } from "../Types";
-import { userContext } from "../useContext";
+import { userContext } from "../userContext";
 
 // הגדרת הסכמת וולידציה עם yup
 const schema = yup.object().shape({
@@ -83,24 +83,38 @@ const SignUp = () => {
 
     // פונקציה שתטפל בנתונים לאחר שליחת הטופס
     const onSubmit = async (data:any) => {
-        console.log(data);
-        
         try {
-            const response = await axios.post<user>("http://localhost:8080/api/user/sighin", data, {
-                headers: { "Content-Type": "application/json" },
-              });
-
-            if (response.status === 201) {
-                const user = response.data;
-                console.log("User created:", user);
-                navigate("/Home"); // לאחר הצלחה, מעביר לדף הבית
+            const response = await axios.post<user>('http://localhost:8080/api/user/sighin',
+              {
+                UserName: data.username,
+                Password: data.password,
+                Name: data.name,
+                Phone: data.phone,
+                Email: data.email,
+                Tz: data.tz,
+              }
+            );
+            console.log('✅ המשתמש נרשם בהצלחה:', response.data);
+            setMyUser({
+              Id: response.data.Id,
+              Password: response.data.Password,
+              Name: response.data.Name,
+              UserName: response.data.UserName,
+              Phone: response.data.Phone,
+              Email: response.data.Email,
+              Tz: response.data.Tz
+            });
+            navigate('/Home');  // ניווט לאחר ההתחברות
+          } catch (error: any) {
+            if (error.response) {
+              console.error("❌ שגיאת שרת:", error.response.status, error.response.data);
+            } else if (error.request) {
+              console.error("⚠️ שגיאת רשת: אין תגובה מהשרת");
             } else {
-                console.log("Error creating user, try again.");
+              console.error("🔴 שגיאה לא צפויה:", error.message);
             }
-        } catch (error) {
-            console.error("Error signing up:", error);
-        }
-    };
+          }
+        };
 
     return (
         <div className="flex justify-center items-center h-screen bg-gray-100">

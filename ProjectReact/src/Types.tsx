@@ -1,5 +1,11 @@
+
+export type userLogin = {
+    UserName: string,
+    Password: string
+}
+
 export type user = {
-    Username: string,
+    UserName: string,
     Password:string,
     Name: string,
     Phone: string,
