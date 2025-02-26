@@ -5,6 +5,7 @@ import SignUp from "./Components/SignUp";
 import AllRecipes from "./Components/AllRecipes";
 import AddRecipe from "./Components/AddRecipe";
 import UserContext from "./userContext";
+import UpdateRecipe from "./Components/UpdateRecipe";
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                 <Route path="/SignUp" element={<SignUp />} />
                 <Route path="/AllRecipes" element={<AllRecipes />} />
                 <Route path="/AddRecipe" element={<AddRecipe />} />
+                <Route path="/UpdateRecipe" element={<UpdateRecipe />} />
             </Routes>
         </Router>
         </UserContext>

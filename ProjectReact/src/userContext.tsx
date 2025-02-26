@@ -1,41 +1,46 @@
-import { createContext ,ReactElement,useEffect,useState} from "react";
-import { user } from "./Types";
+
+import { createContext, ReactElement, useEffect, useState } from "react";
+import { recipe, user } from "./Types";
+import AllRecipes from "./Components/AllRecipes";
 
 type typeContext = {
-    MyUser: user | null;
-    setMyUser: (MyUser: any) => void
-}
+    MyUser: user | null,
+    setMyUser: (MyUser: user | null) => void,
+    // myRecipe: recipe|null,
+    // setMyRecipe: (recipe:recipe|null)=>void;
+};
 
 export const userContext = createContext<typeContext>({
     MyUser: null,
-    setMyUser: (_: any) => { }
+    setMyUser: () => {},
+    // myRecipe: null,
+    // setMyRecipe: ()=>{}
 });
 
-const UserContext = ({children}:{children:ReactElement})=>{
+const UserContext = ({ children }: { children: ReactElement }) => {
     const [user, setUser] = useState<user | null>(null);
 
     useEffect(() => {
-      const savedUser = localStorage.getItem("user");
-      if (savedUser) {
-        setUser(JSON.parse(savedUser));
-      }
-  }, []);
+        const savedUser = sessionStorage.getItem("user");
+        if (savedUser) {
+            setUser(JSON.parse(savedUser));
+        }
+    }, []);
 
-  // פונקציה שמעדכנת גם את ה-state וגם את localStorage
-  const setMyUser = (user: user | null) => {
-    setUser(user);
-      if (user) {
-          localStorage.setItem("user", JSON.stringify(user));
-      } else {
-          localStorage.removeItem("user");
-      }
-  };
+    const setMyUser = (user: user | null) => {
+        setUser(user);
+        if (user) {
+            sessionStorage.setItem("user", JSON.stringify(user));
+        } else {
+            sessionStorage.removeItem("user");
+        }
+    };
 
     return (
-        <userContext.Provider value={{ MyUser: user, setMyUser }}>
-          {children}
+        <userContext.Provider value={{ MyUser: user, setMyUser}}>
+            {children}
         </userContext.Provider>
-      );
-}
+    );
+};
 
 export default UserContext;

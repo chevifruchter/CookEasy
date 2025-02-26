@@ -1,186 +1,243 @@
-// import React, { useReducer } from "react";
+// //מתכונים מהשרת
+// import React, { useReducer, useEffect, useContext } from "react";
 // import { Card, Typography, Grid, Box, Button } from "@mui/material";
 // import { styled } from "@mui/system";
 // import { useNavigate } from "react-router-dom"; // בשביל הניווט
-// import cakeImg from '../images/alex-munsell-auIbTAcSH6E-unsplash (2).jpg';
-// import Pasta from '../images/צילום מסך 2025-02-24 160417.png';
-// import { yellow } from "@mui/material/colors";
+// import axios from 'axios'; // ייבוא axios
+// import { userContext } from "../userContext";
 
-// //import "../Designs/SiginIn.css"; // עיצוב מותאם אישית
+// // 🔹 קבלת כל המתכונים (GET)
+// export const getAllRecipes = async () => {
+//     try {
+//         const response = await axios.get(`http://localhost:8080/api/recipe`);
+//         return response.data;
+//     } catch (error) {
+//         console.error("❌ Error fetching recipes:", error);
+//         throw error;
+//     }
+// };
 
-// // מערך המתכונים
-// const recipesData = [
-//   {
-//     Id: 1,
-//     Name: "Chocolate Cake",
-//     Instructions: [{ Name: "Mix ingredients, bake for 30 min" }],
-//     Difficulty: "medium",
-//     Duration: 60,
-//     Img: cakeImg,
-//     Ingridents: [
-//       { Name: "Flour", Count: 2, Type: "Cups" },
-//       { Name: "Sugar", Count: 1, Type: "Cup" },
-//     ],
-//     UserId: 101,
-//     CategoryId: 5,
-//     Description: "A delicious chocolate cake recipe.",
-//   },
-//   {
-//     Id: 2,
-//     Name: "Pasta Carbonara",
-//     Instructions: [{ Name: "Cook pasta, mix with sauce, cook the cream together with the eggs" }],
-//     Difficulty: "low",
-//     Duration: 30,
-//     Img: Pasta,
-//     Ingridents: [
-//       { Name: "Pasta", Count: 1, Type: "Pack" },
-//       { Name: "Eggs", Count: 2, Type: "Pieces" },
-//     ],
-//     UserId: 102,
-//     CategoryId: 3,
-//     Description: "Classic Italian pasta dish.",
-//   },
-// ];
+// // 🔹 קבלת מתכון לפי ID (GET)
+// export const getRecipeById = async (recipeId: number) => {
+//     try {
+//         const response = await axios.get(`http://localhost:8080/api/recipe/${recipeId}`);
+//         return response.data;
+//     } catch (error) {
+//         console.error(`❌ Error fetching recipe with ID ${recipeId}:`, error);
+//         throw error;
+//     }
+// };
+
+// // 🔹 הוספת מתכון חדש (POST)
+// export const addRecipe = async (recipe: { name: string; ingredients: string; instructions: string; userId: number }) => {
+//     try {
+//         const response = await axios.post(`http://localhost:8080/api/recipe/add`, recipe);
+//         return response.data;
+//     } catch (error) {
+//         console.error("❌ Error adding recipe:", error);
+//         throw error;
+//     }
+// };
+
+// // 🔹 עדכון מתכון קיים (PUT)
+// export const updateRecipe = async (recipeId: number, updatedData: { name?: string; ingredients?: string; instructions?: string }) => {
+//     try {
+//         const response = await axios.put(`http://localhost:8080/api/recipe/update/${recipeId}`, updatedData);
+//         return response.data;
+//     } catch (error) {
+//         console.error(`❌ Error updating recipe with ID ${recipeId}:`, error);
+//         throw error;
+//     }
+// };
+
+// // 🔹 מחיקת מתכון (DELETE)
+// export const deleteRecipe = async (recipeId: number) => {
+//     try {
+//         const response = await axios.delete(`http://localhost:8080/api/recipe/delete/${recipeId}`);
+//         return response.data;
+//     } catch (error) {
+//         console.error(`❌ Error deleting recipe with ID ${recipeId}:`, error);
+//         throw error;
+//     }
+// };
 
 // // Reducer
-// const initialState = { recipes: recipesData };
+// const initialState = { recipes: [], loading: true, error: null };
+
 // const recipeReducer = (state: any, action: any): any => {
 //   switch (action.type) {
+//     case "SET_RECIPES":
+//       return { ...state, recipes: action.payload, loading: false };
+//     case "SET_LOADING":
+//       return { ...state, loading: true };
+//     case "SET_ERROR":
+//       return { ...state, error: action.payload, loading: false };
 //     default:
 //       return state;
 //   }
 // };
 
-// // עיצוב הכרטיסים
 // const StyledCard = styled(Card)(() => ({
 //   backgroundColor: "white",
 //   color: "black",
-//   padding: "20px",
+//   padding: "200px", // הגדר padding סביר שייתן מקום לכל התוכן
 //   borderRadius: "16px",
-//   boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)",
+//   boxShadow: "0px -4px 15px rgba(0, 0, 0, 0.2)", // box-shadow למעלה
 //   textAlign: "center",
-//   width: "100%",
-//   height: "100%",
 //   display: "flex",
 //   flexDirection: "column",
-//   justifyContent: "space-between",
+//   justifyContent: "flex-start",
 //   alignItems: "center",
+//   // minHeight: "50px", // גובה קבוע
 //   marginBottom: "20px",
+//   overflow: "auto", // בגלילה בתוכן ארוך
+//   position: "relative",
 // }));
 
 // // עיצוב התמונה
 // const StyledImg = styled("img")({
 //   width: "100%",
-//   maxHeight: "300px",
+//   maxHeight: "250px", // שינוי גובה התמונה כדי להשאיר מקום לתוכן
 //   objectFit: "cover",
 //   borderRadius: "12px",
+//   marginBottom: "15px", // יצירת מרווח בין התמונה לתוכן
 // });
 
 // // עיצוב הכותרת
 // const StyledTypography = styled(Typography)(() => ({
 //   color: "#f50380",
 //   fontWeight: "bold",
-//   fontSize: "26px",
+//   fontSize: "24px", // שינוי גודל הטקסט
+//   marginBottom: "10px", // מרווח בין הכותרת לשאר התוכן
 // }));
 
 // const PageContainer = styled(Box)(() => ({
 //   backgroundColor: "#f9f9f9",
 //   minHeight: "100vh",
-//   padding: "40px 0",
+//   padding: "40px ",
 //   display: "flex",
-//   flexDirection: "column",
+//   flexDirection: "row",
 //   alignItems: "center",
-//   width: "100%",
+//   width: "1000",
 // }));
 
 // // כפתורים
 // const ButtonContainer = styled(Box)(() => ({
 //   display: "flex",
 //   justifyContent: "space-between",
-//   width: "100%",
+//   width: "200px",
 //   marginTop: "20px",
 // }));
 
 // // כפתור הוספת מתכון
 // const AddRecipeButton = styled(Button)(() => ({
 //   position: "absolute",
-//   top: "20px",
-//   right: "200px",
+//   top: "40px",
+//   right: "240px",
 //   backgroundColor: "#f50380",
 //   color: "white",
 //   fontSize: "12px",
-//  // padding: "4px 8px",
-//   //minWidth: "40px", // מגדיר רוחב מינימלי
-//   height: "45px", // גובה קבוע
-//   width: "100px", // קובע בדיוק את הרוחב כדי שלא יגדל
-//   borderRadius: "50px", // הופך אותו לעגול
+//   height: "45px",
+//   width: "100px",
+//   borderRadius: "50px",
 //   display: "flex",
 //   alignItems: "center",
 //   justifyContent: "center",
-//   textTransform: "none", // מונע אותיות גדולות אוטומטית
+//   textTransform: "none",
 //   "&:hover": {
-//     backgroundColor:"#1E88E5",
-//     color:"white"
+//     backgroundColor: "#1E88E5",
+//     color: "white",
 //   },
 // }));
 
-// // בתוך ה-PageContainer:
-
 // const AllRecipes = () => {
-//   const [state] = useReducer(recipeReducer, initialState);
+//   const [state, dispatch] = useReducer(recipeReducer, initialState);
 //   const navigate = useNavigate(); // לשימוש בניווט
+//   const { MyUser } = useContext(userContext);
+//   let header: boolean = false;
 
-// <AddRecipeButton onClick={() => navigate("/AddRecipe")}>➕</AddRecipeButton>
+//   if (MyUser)
+//     header = true;
+
+//   useEffect(() => {
+//     const fetchRecipes = async () => {
+//       dispatch({ type: "SET_LOADING" });
+//       try {
+//         const response = await axios.get("http://localhost:8080/api/recipe");
+//         dispatch({ type: "SET_RECIPES", payload: response.data });
+//       } catch (error) {
+//         dispatch({ type: "SET_ERROR", payload: "Failed to fetch recipes" });
+//         console.error(error);
+//       }
+//     };
+//     fetchRecipes();
+//   }, []);
 
 //   return (
 //     <PageContainer>
 //       {/* כפתור הוספת מתכון */}
-//       <AddRecipeButton onClick={() => navigate("/AddRecipe")}>➕ Add Recipe</AddRecipeButton>
+//       <AddRecipeButton onClick={() => {
+//         if (header)
+//           navigate("/AddRecipe")
+//       }}>➕ Add Recipe
+//       </AddRecipeButton>
 
-//       <Grid container spacing={4} justifyContent="center" sx={{ maxWidth: "100%" }}>
-//         {state.recipes.map((recipe: any) => (
-//           <Grid item key={recipe.Id} xs={12} sm={6} md={4} lg={4}>
-//             <StyledCard>
-//               <StyledTypography>{recipe.Name}</StyledTypography>
-//               <StyledImg src={recipe.Img} alt={recipe.Name} />
-//               <Typography variant="body1" sx={{ margin: "10px 0" }}>
-//                 {recipe.Description}
-//               </Typography>
-//               <Typography>⏳ {recipe.Duration} min | 🔥 {recipe.Difficulty}</Typography>
-//               <Typography variant="h6" sx={{ marginTop: "10px", fontWeight: "bold", color: "#f50380" }}>
-//                 Ingredients:
-//               </Typography>
-//               {recipe.Ingridents.map((ing: any, index: number) => (
-//                 <Typography key={index}>
-//                   {ing.Count} {ing.Type} {ing.Name}
+//       {state.loading ? (
+//         <Typography>Loading...</Typography>
+//       ) : state.error ? (
+//         <Typography color="error">{state.error}</Typography>
+//       ) : (
+//         <Grid container spacing={4} justifyContent="center" sx={{ maxWidth: "100%" }}>
+//           {state.recipes.map((recipe: any) => (
+//             <Grid item key={recipe.Id} xs={12} sm={6} md={4} lg={4}>
+//               <StyledCard>
+//                 <StyledTypography>{recipe.Name}</StyledTypography>
+//                 <StyledImg src={recipe.Img} alt={recipe.Name} />
+//                 <Typography variant="body1" sx={{ marginBottom: "15px" }}>
+//                   {recipe.Description}
 //                 </Typography>
-//               ))}
-//               <Typography variant="h6" sx={{ marginTop: "10px", fontWeight: "bold", color: "#f50380" }}>
-//                 Instructions:
-//               </Typography>
-//               {recipe.Instructions.map((inst: any, index: number) => (
-//                 <Typography key={index}>
-//                   {index + 1}. {inst.Name}
+//                 <Typography sx={{ marginBottom: "15px", display: 'inline' }}>
+//                   ⏳ {recipe.Duration} min | 🔥 {recipe.Difficulty}
 //                 </Typography>
-//               ))}
-//               <ButtonContainer>
-//                 <Button variant="contained" color="primary" size="small">
-//                   Update
-//                 </Button>
-//                 <Button variant="outlined" color="secondary" size="small">
-//                   Delete
-//                 </Button>
-//               </ButtonContainer>
-//             </StyledCard>
-//           </Grid>
-//         ))}
-//       </Grid>
+
+
+//                 <Typography variant="h6" sx={{ fontWeight: "bold", color: "#f50380" }}>
+//                   Ingredients:
+//                 </Typography>
+//                 {recipe.Ingridents.map((ing: any, index: number) => (
+//                   <Typography key={index}>
+//                     {ing.Count} {ing.Type} {ing.Name}
+//                   </Typography>
+//                 ))}
+
+//                 <Typography variant="h6" sx={{ fontWeight: "bold", color: "#f50380", marginTop: "15px" }}>
+//                   Instructions:
+//                 </Typography>
+//                 {recipe.Instructions.map((inst: any, index: number) => (
+//                   <Typography key={index}>
+//                     {index + 1}. {inst.Name}
+//                   </Typography>
+//                 ))}
+//                 <ButtonContainer>
+//                   <Button variant="contained" color="primary" size="small">
+//                     Update
+//                   </Button>
+//                   <Button variant="outlined" color="secondary" size="small">
+//                     Delete
+//                   </Button>
+//                 </ButtonContainer>
+//               </StyledCard>
+//             </Grid>
+//           ))}
+//         </Grid>
+//       )}
 //     </PageContainer>
 //   );
 // };
 
 // export default AllRecipes;
-//מתכונים מהשרת
+
+
 import React, { useReducer, useEffect, useContext } from "react";
 import { Card, Typography, Grid, Box, Button } from "@mui/material";
 import { styled } from "@mui/system";
@@ -188,9 +245,63 @@ import { useNavigate } from "react-router-dom"; // בשביל הניווט
 import axios from 'axios'; // ייבוא axios
 import { userContext } from "../userContext";
 
+// 🔹 קבלת כל המתכונים (GET)
+export const getAllRecipes = async () => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/recipe`);
+        return response.data;
+    } catch (error) {
+        console.error("❌ Error fetching recipes:", error);
+        throw error;
+    }
+};
+
+// 🔹 קבלת מתכון לפי ID (GET)
+export const getRecipeById = async (recipeId: number) => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/recipe/${recipeId}`);
+        return response.data;
+    } catch (error) {
+        console.error(`❌ Error fetching recipe with ID ${recipeId}:`, error);
+        throw error;
+    }
+};
+
+// 🔹 הוספת מתכון חדש (POST)
+export const addRecipe = async (recipe: { name: string; ingredients: string; instructions: string; userId: number }) => {
+    try {
+        const response = await axios.post(`http://localhost:8080/api/recipe/add`, recipe);
+        return response.data;
+    } catch (error) {
+        console.error("❌ Error adding recipe:", error);
+        throw error;
+    }
+};
+
+// 🔹 עדכון מתכון קיים (PUT)
+export const updateRecipe = async (recipeId: number, updatedData: { name?: string; ingredients?: string; instructions?: string }) => {
+    try {
+        const response = await axios.put(`http://localhost:8080/api/recipe/update/${recipeId}`, updatedData);
+        return response.data;
+    } catch (error) {
+        console.error(`❌ Error updating recipe with ID ${recipeId}:`, error);
+        throw error;
+    }
+};
+
+// 🔹 מחיקת מתכון (DELETE)
+export const deleteRecipe = async (recipeId: number) => {
+    try {
+        const response = await axios.delete(`http://localhost:8080/api/recipe/delete/${recipeId}`);
+        return response.data;
+    } catch (error) {
+        console.error(`❌ Error deleting recipe with ID ${recipeId}:`, error);
+        throw error;
+    }
+};
+
 // Reducer
 const initialState = { recipes: [], loading: true, error: null };
-
 
 const recipeReducer = (state: any, action: any): any => {
   switch (action.type) {
@@ -216,13 +327,11 @@ const StyledCard = styled(Card)(() => ({
   flexDirection: "column",
   justifyContent: "flex-start",
   alignItems: "center",
-  // minHeight: "50px", // גובה קבוע
   marginBottom: "20px",
   overflow: "auto", // בגלילה בתוכן ארוך
   position: "relative",
 }));
 
-// עיצוב התמונה
 const StyledImg = styled("img")({
   width: "100%",
   maxHeight: "250px", // שינוי גובה התמונה כדי להשאיר מקום לתוכן
@@ -231,7 +340,6 @@ const StyledImg = styled("img")({
   marginBottom: "15px", // יצירת מרווח בין התמונה לתוכן
 });
 
-// עיצוב הכותרת
 const StyledTypography = styled(Typography)(() => ({
   color: "#f50380",
   fontWeight: "bold",
@@ -249,7 +357,6 @@ const PageContainer = styled(Box)(() => ({
   width: "1000",
 }));
 
-// כפתורים
 const ButtonContainer = styled(Box)(() => ({
   display: "flex",
   justifyContent: "space-between",
@@ -257,7 +364,6 @@ const ButtonContainer = styled(Box)(() => ({
   marginTop: "20px",
 }));
 
-// כפתור הוספת מתכון
 const AddRecipeButton = styled(Button)(() => ({
   position: "absolute",
   top: "40px",
@@ -284,10 +390,60 @@ const AllRecipes = () => {
   const { MyUser } = useContext(userContext);
   let header: boolean = false;
 
-  // alert(MyUser)
+  if (MyUser) header = true;
 
-  if (MyUser)
-    header = true;
+  const isUserOwner = (recipe: any) => {
+    return recipe.UserId === MyUser?.Id; // בודק אם המשתמש הנוכחי יצר את המתכון
+  };
+
+  const handleUpdateRecipe = async (recipe: any) => {
+    if (!isUserOwner(recipe)) {
+        alert("You do not have permission to update this recipe.");
+        return; // אם המשתמש לא יצר את המתכון, נעצור את הפעולה
+    }
+    try {
+        const updatedData = {
+            name: "Updated Recipe Name", // לדוגמה
+            ingredients: "Updated Ingredients list", // לדוגמה
+            instructions: "Updated Instructions", // לדוגמה
+        };
+        const updatedRecipe = await updateRecipe(recipe.Id, updatedData); // קריאה לפונקציה שמבצעת את העדכון
+        dispatch({ type: "SET_RECIPES", payload: state.recipes.map((r: any) => r.Id === recipe.Id ? updatedRecipe : r) });
+        navigate(`/recipe/${recipe.Id}`); // ניווט לדף המתכון לאחר העדכון
+    } catch (error) {
+        alert("Failed to update recipe.");
+    }
+  };
+
+  const handleDeleteRecipe = async (recipe: any) => {
+    if (!isUserOwner(recipe)) {
+        alert("You do not have permission to delete this recipe.");
+        return; // אם המשתמש לא יצר את המתכון, נעצור את הפעולה
+    }
+    try {
+        await deleteRecipe(recipe.Id); // קריאה לפונקציה שמבצעת את המחיקה
+        dispatch({ type: "SET_RECIPES", payload: state.recipes.filter((r: any) => r.Id !== recipe.Id) });
+        navigate("/AllRecipes"); // ניווט חזרה לדף המתכונים
+    } catch (error) {
+        alert("Failed to delete recipe.");
+    }
+  };
+
+  const handleAddRecipe = async () => {
+    try {
+        const newRecipe = {
+            name: "New Recipe Name",
+            ingredients: "Ingredients list",
+            instructions: "Cooking instructions",
+            userId: MyUser?.Id, // לוודא שאתה שולח את מזהה המשתמש
+        };
+        const addedRecipe = await addRecipe(newRecipe); // קריאה לפונקציה שמבצעת את ההוספה
+        dispatch({ type: "SET_RECIPES", payload: [...state.recipes, addedRecipe] });
+        navigate("/AllRecipes"); // ניווט לדף המתכונים
+    } catch (error) {
+        alert("Failed to add recipe.");
+    }
+  };
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -307,10 +463,8 @@ const AllRecipes = () => {
     <PageContainer>
       {/* כפתור הוספת מתכון */}
       <AddRecipeButton onClick={() => {
-        if (header)
-          navigate("/AddRecipe")
-      }}>➕ Add Recipe
-      </AddRecipeButton>
+        if (header) navigate("/AddRecipe");
+      }}>➕ Add Recipe</AddRecipeButton>
 
       {state.loading ? (
         <Typography>Loading...</Typography>
@@ -330,7 +484,6 @@ const AllRecipes = () => {
                   ⏳ {recipe.Duration} min | 🔥 {recipe.Difficulty}
                 </Typography>
 
-
                 <Typography variant="h6" sx={{ fontWeight: "bold", color: "#f50380" }}>
                   Ingredients:
                 </Typography>
@@ -348,11 +501,22 @@ const AllRecipes = () => {
                     {index + 1}. {inst.Name}
                   </Typography>
                 ))}
+                
                 <ButtonContainer>
-                  <Button variant="contained" color="primary" size="small">
+                  <Button 
+                    variant="contained" 
+                    color="primary" 
+                    size="small" 
+                    onClick={() => { if (header) handleUpdateRecipe(recipe)}} // עדכון המתכון
+                  >
                     Update
                   </Button>
-                  <Button variant="outlined" color="secondary" size="small">
+                  <Button 
+                    variant="outlined" 
+                    color="secondary" 
+                    size="small" 
+                    onClick={() => { if (header) handleDeleteRecipe(recipe)}} // מחיקת המתכון
+                  >
                     Delete
                   </Button>
                 </ButtonContainer>
@@ -366,3 +530,4 @@ const AllRecipes = () => {
 };
 
 export default AllRecipes;
+
