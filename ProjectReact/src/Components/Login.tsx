@@ -6,8 +6,8 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import "../Designs/login.css";
 import SignUp from "./SignUp";
-import { userContext } from "../userContext";
-import {user} from "../Types";
+import { userContext } from "../Context/userContext";
+
 
 const schema = yup.object().shape({
     username: yup
@@ -46,17 +46,6 @@ const Login = () => {
                     Password: data.password,
                 }),
             });
-            
-            // {
-            //     Email: user.data.Email,
-            //     Id: user.data.Id,
-            //     Name: user.data.Name,
-            //     Password: user.data.Password,
-            //     Phone: user.data.Phone,
-            //     Tz: user.data.Tz,
-            //     UserName: user.data.UserName
-            //   }
-
 
             if (response.ok) {
                 const user = await response.json();

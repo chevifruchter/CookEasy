@@ -54,8 +54,8 @@ import * as yup from "yup";
 import { data, useNavigate } from "react-router-dom";
 import axios from "axios"; // ייבוא axios
 import "../Designs/SignUp.css";
-import { user } from "../Types";
-import { userContext } from "../userContext";
+import { user } from "../Repositories/Types";
+import { userContext } from "../Context/userContext";
 
 // הגדרת הסכמת וולידציה עם yup
 const schema = yup.object().shape({
