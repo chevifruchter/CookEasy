@@ -22,10 +22,6 @@ const Home = () => {
           <button className="custom-button primary">Login</button>
         </Link>
 
-        <Link to="/MyRecipes" className="link-button">
-          <button className="custom-button secondary">My Recipes</button>
-        </Link>
-
         <Link to="/AllRecipes" className="link-button">
           <button className="custom-button success">All Recipes</button>
         </Link>
