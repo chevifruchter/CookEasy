@@ -5,11 +5,11 @@ import { userContext } from "../Context/userContext";
 
 
 const Home = () => {
-  const {MyUser} = useContext(userContext);
+  const { MyUser } = useContext(userContext);
   console.log(`this is the object:${MyUser?.UserName}`);
-  
+
   return (
-  
+
     <div className="home-container">
       <div className="image-container">
       </div>

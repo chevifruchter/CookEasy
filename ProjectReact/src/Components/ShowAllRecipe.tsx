@@ -4,16 +4,26 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Recipe } from "../Repositories/Types";
 import { userContext } from "../Context/userContext";
+interface ShowAllRecipesProps {
 
-const RecipesPage = () => {
+  recipeArrToShow: Recipe[];
+
+}
+
+const RecipesPage: React.FC<ShowAllRecipesProps> = ({ recipeArrToShow }) => {
+  console.log(recipeArrToShow);
+  if (!recipeArrToShow || recipeArrToShow.length === 0) {
+    return <p>אין מתכונים מתאימים</p>;
+  }
+
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const { MyUser } = useContext(userContext);
   const navigate = useNavigate();
+  
   useEffect(() => {
     fetchRecipes();
   }, []);
-
-  const isRecipeByCurrentUser = (recipe:any) => {
+  const isRecipeByCurrentUser = (recipe: any) => {
     return recipe.UserId === MyUser?.Id;
   };
 
@@ -26,22 +36,21 @@ const RecipesPage = () => {
     }
   };
 
-  const handleEdit = (recipe:Recipe) => {
+  const handleEdit = (recipe: Recipe) => {
     console.log("עריכת מתכון:", recipe.Id);
-    // if(isRecipeByCurrentUser(recipe))
-    navigate(`/EditRecipe/${recipe.Id}`); // ניווט לעמוד עריכת מתכון
-    // כאן ניתן להוסיף ניווט לעמוד עריכה או לפתוח מודל
+    if (isRecipeByCurrentUser(recipe))
+      navigate(`/EditRecipe/${recipe.Id}`);
   };
 
-  const handleDelete = async (recipe:Recipe) => {
-    if(isRecipeByCurrentUser(recipe)){
-    try {
-      await axios.post(`http://localhost:8080/api/recipe/delete/${recipe.Id}`);
-      fetchRecipes(); // רענון הרשימה לאחר מחיקה
-    } catch (err) {
-      console.error("שגיאה במחיקת מתכון", err);
+  const handleDelete = async (recipe: Recipe) => {
+    if (isRecipeByCurrentUser(recipe)) {
+      try {
+        await axios.post(`http://localhost:8080/api/recipe/delete/${recipe.Id}`);
+        fetchRecipes(); // רענון הרשימה לאחר מחיקה
+      } catch (err) {
+        console.error("שגיאה במחיקת מתכון", err);
+      }
     }
-  }
   };
 
   const handleAddRecipe = () => {
@@ -51,15 +60,11 @@ const RecipesPage = () => {
 
   return (
     <div style={{ padding: "2rem" }}>
-      {/* <Typography variant="h4" gutterBottom>
-        רשימת מתכונים
-      </Typography> */}
-
       <Button variant="contained" color="primary" onClick={handleAddRecipe} style={{ marginBottom: "1rem" }}>
         הוסף מתכון חדש
       </Button>
       <Grid container spacing={3}>
-        {recipes.map((recipe) => (
+        {recipeArrToShow.map((recipe) => (
           <Grid item xs={40} sm={40} md={20} key={recipe.Id}>
             <Card>
               <CardMedia
@@ -70,6 +75,10 @@ const RecipesPage = () => {
               />
               <CardContent>
                 <Typography variant="h6">{recipe.Name}</Typography>
+                <Typography variant="h6">{"difficulty: " + recipe.Difficulty}</Typography>
+                <Typography variant="h6">{"duration: " + recipe.Duration}</Typography>
+                <Typography variant="h6">{"categoy: " + recipe.Categoryid}</Typography>
+                <Typography variant="h6">{"userid: " + recipe.UserId}</Typography>
                 <Typography variant="body2" color="textSecondary">
                   {recipe.Description}
                 </Typography>

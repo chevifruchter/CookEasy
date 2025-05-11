@@ -3,8 +3,11 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-  font-family: 'Rubik', sans-serif;
+  font-family:'Varela Round', 'Heebo', sans-serif;
 
+}
+body {
+  font-family: 'Varela Round', 'Heebo', sans-serif;
 }
 
 .logo {

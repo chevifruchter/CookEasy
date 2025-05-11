@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import "../Designs/login.css";
 import SignUp from "./SignUp";
 import { userContext } from "../Context/userContext";
+import { user } from "../Repositories/Types";
 
 
 const schema = yup.object().shape({
@@ -14,7 +15,7 @@ const schema = yup.object().shape({
         .string()
         .required("שם משתמש הוא שדה חובה")
         .test('not-email', 'שם המשתמש לא יכול להיות כתובת מייל', value => {
-            return !/\S+@\S+\.\S+/.test(value); // בודק אם זה לא כתובת מייל
+            return !/\S+@\S+\.\S+/.test(value);
         }),
     password: yup
         .string()
@@ -24,8 +25,12 @@ const schema = yup.object().shape({
 
 const Login = () => {
     const navigate = useNavigate();
-    const {setMyUser} = useContext(userContext);
-
+    const { setMyUser } = useContext(userContext);
+    const users: user[] = []
+    const setAllUsers = (user: user) => {
+        users.push(user);
+        console.log("users", users);
+    }
     const {
         register,
         handleSubmit,
@@ -33,8 +38,8 @@ const Login = () => {
     } = useForm({
         resolver: yupResolver(schema),
     });
-    
-    const onSubmit = async (data: {username:string;password:string}) => {
+
+    const onSubmit = async (data: { username: string; password: string }) => {
         try {
             const response = await fetch("http://localhost:8080/api/user/Login", {
                 method: "POST",
@@ -52,6 +57,7 @@ const Login = () => {
                 console.log("User found:", user);
                 console.log("🔍 Response from server:", user);
                 setMyUser(user);
+                setAllUsers(user);
                 navigate("/Home"); // מעביר לדף הבית
             } else {
                 console.log("User not found, redirecting to sign-up");
@@ -83,9 +89,9 @@ const Login = () => {
 
                 <button type="submit" onClick={SignUp} className="signup-button">
                     Login 🤍
-                    
+
                 </button>
-              
+
             </form>
         </div>
     );

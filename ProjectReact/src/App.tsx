@@ -6,7 +6,7 @@ import SignUp from "./Components/SignUp";
 // import AddRecipe from "./Components/AddRecipe";
 import UserContext from "../src/Context/userContext";
 import UpdateRecipe from "./Components/EditRecipe";
-import CheckAllRecipes from "./Components/CheckAllRecipes";
+import CheckAllRecipes from "./Components/AllRecipes";
 import RecipesPage from "./Components/ShowAllRecipe";
 import AddRecipeForm from "./Components/AddRecipe";
 import EditRecipe from "./Components/EditRecipe";
@@ -21,7 +21,7 @@ function App() {
                 <Route path="/Login" element={<Login />} />
                 <Route path="/SignUp" element={<SignUp />} />
                 <Route path="/AllRecipes" element={<CheckAllRecipes />} />
-                <Route path="/ShowAllRecipe" element={<RecipesPage />} />
+                <Route path="/ShowAllRecipe" element={<RecipesPage recipeArrToShow={[]} />} />
                 <Route path="/MyRecipes" element={<MyRecipes />} />
                 <Route path="/AddRecipe" element={<AddRecipeForm />} />
                 {/* <Route path="/EditRecipe" element={<EditRecipe recipeId={""} />} /> */}

@@ -6,20 +6,20 @@ import { Recipe, user } from "../Repositories/Types";
 type typeContext = {
     MyUser: user | null,
     setMyUser: (MyUser: user | null) => void,
-    // myRecipe: recipe|null,
-    // setMyRecipe: (recipe:recipe|null)=>void;
+    users: user[] | null,
+    setusers: (users: user[] | null) => void;
 };
 
 export const userContext = createContext<typeContext>({
     MyUser: null,
-    setMyUser: () => {},
-    // myRecipe: null,
-    // setMyRecipe: ()=>{}
+    setMyUser: () => { },
+    users: null,
+    setusers: () => { }
 });
 
 const UserContext = ({ children }: { children: ReactElement }) => {
     const [user, setUser] = useState<user | null>(null);
-
+    const [users, setUsers] = useState<user[] | null>(null);
     useEffect(() => {
         const savedUser = sessionStorage.getItem("user");
         if (savedUser) {
@@ -35,9 +35,11 @@ const UserContext = ({ children }: { children: ReactElement }) => {
             sessionStorage.removeItem("user");
         }
     };
-
+    const setusers = (users: user[] | null) => {
+        setUsers(users)
+    }
     return (
-        <userContext.Provider value={{ MyUser: user, setMyUser}}>
+        <userContext.Provider value={{ MyUser: user, setMyUser, users, setusers }}>
             {children}
         </userContext.Provider>
     );

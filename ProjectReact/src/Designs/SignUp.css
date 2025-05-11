@@ -5,29 +5,35 @@
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     width: 100%;
     height: 100%;
     font-family: 'Arial', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #fcf7fb; /* רקע אפור בהיר */
+    background-color: #fcf7fb;
+    /* רקע אפור בהיר */
 }
 
 .container {
-    width: 70%; /* רוחב יותר צר */
-    max-width: 70%; /* גבול רוחב מקסימלי */
+    width: 70%;
+    /* רוחב יותר צר */
+    max-width: 70%;
+    /* גבול רוחב מקסימלי */
     padding: 24px;
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* צלליות */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /* צלליות */
 }
 
 h1 {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 3rem;
-    color: #6f6d6d; /* צבע חום כהה */
+    color: #6f6d6d;
+    /* צבע חום כהה */
     font-weight: bold;
     margin-bottom: 24px;
     text-align: center;
@@ -35,7 +41,8 @@ h1 {
 
 h2 {
     font-size: 1.8rem;
-    color: #c90661; /* צבע חום כהה */
+    color: #c90661;
+    /* צבע חום כהה */
     font-weight: bold;
     margin-bottom: 24px;
     text-align: center;
@@ -43,7 +50,8 @@ h2 {
 
 label {
     font-size: 1rem;
-    color: #c90661; /* צבע חום כהה */
+    color: #c90661;
+    /* צבע חום כהה */
     margin-bottom: 8px;
     font-weight: 600;
     text-align: right;
@@ -55,23 +63,29 @@ input {
     padding: 12px 16px;
     margin-bottom: 16px;
     border-radius: 8px;
-    border: 2px solid #f183b1; /* צבע border חום בהיר */
+    border: 2px solid #f183b1;
+    /* צבע border חום בהיר */
     font-size: 1rem;
-    background-color: #f9f4f1; /* רקע בהיר ל-input */
-    color: #c90661; /* צבע טקסט חום כהה */
+    background-color: #f9f4f1;
+    /* רקע בהיר ל-input */
+    color: #c90661;
+    /* צבע טקסט חום כהה */
     transition: border-color 0.3s, background-color 0.3s;
 }
 
 input:focus {
-    border-color: #a5044f; /* צבע border כשיש פוקוס (חום יותר כהה) */
-    background-color: #fff; /* רקע לבן כשיש פוקוס */
+    border-color: #a5044f;
+    /* צבע border כשיש פוקוס (חום יותר כהה) */
+    background-color: #fff;
+    /* רקע לבן כשיש פוקוס */
     outline: none;
 }
 
 button {
     width: 100%;
     padding: 14px;
-    background-color: #c90661; /* צבע וורוד עתיק */
+    background-color: #c90661;
+    /* צבע וורוד עתיק */
     color: white;
     border: none;
     border-radius: 8px;
@@ -82,8 +96,10 @@ button {
 }
 
 button:hover {
-    background-color: #a5044f; /* צבע כהה יותר בה-hover */
-    transform: scale(1.05); /* מעבר עדין של התפחות כפתור */
+    background-color: #a5044f;
+    /* צבע כהה יותר בה-hover */
+    transform: scale(1.05);
+    /* מעבר עדין של התפחות כפתור */
 }
 
 button:focus {
@@ -92,7 +108,8 @@ button:focus {
 
 /* הודעות שגיאה */
 .text-red-500 {
-    color: #ff4d4d; /* צבע אדום לשגיאות */
+    color: #ff4d4d;
+    /* צבע אדום לשגיאות */
     font-size: 0.875rem;
     margin-top: 4px;
 }
